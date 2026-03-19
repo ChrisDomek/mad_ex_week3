@@ -28,7 +28,9 @@
  */
 function filterNegativeNumbers(numbers) {
   // Your implementation here
+  return numbers.filter(num => num >= 0);
 }
+console.log(filterNegativeNumbers([-1, 0, 5, -3, 8])); // Output: [0, 5, 8]
 
 /**
  * Exercise 2: Doubling Numbers Divisible by Three
@@ -47,7 +49,10 @@ function filterNegativeNumbers(numbers) {
  */
 function doubleDivisibleByThree(numbers) {
   // Your implementation here
+  return numbers.filter(num => num % 3 === 0).map(num => num * 2);
 }
+console.log(doubleDivisibleByThree([1, 2, 3, 4, 5, 6])); // Output: [6, 12]
+
 
 /**
  * Exercise 3: Selecting High-Performing Students with a Specific Hobby
@@ -76,7 +81,16 @@ function doubleDivisibleByThree(numbers) {
  */
 function selectHighPerformingStudents(students) {
   // Your implementation here
+  return students
+    .filter(student => student.GPA >= 5 && student.hobbies.includes('coding'))
+    .map(student => ({ name: student.name, email: student.email }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
+console.log(selectHighPerformingStudents([
+  { id: 1, name: "Alice", email: "alice@example.com", GPA: 6, hobbies: ["coding", "reading"] },
+  { id: 2, name: "Bob", email: "bob@example.com", GPA: 4, hobbies: ["coding"] },
+  { id: 3, name: "Charlie", email: "charlie@example.com", GPA: 5, hobbies: ["sports"] }
+])); // Output: [{ name: "Alice", email: "alice@example.com" }]
 
 /**
  * Exercise 4: Aggregating Student Data with `reduce()`
@@ -104,6 +118,21 @@ function selectHighPerformingStudents(students) {
  */
 function aggregateStudentData(students) {
   // Your implementation here
+  const result = students.reduce((acc, student) => {
+    acc.studentNum += 1;
+    acc.studentAvgGPA += student.GPA;
+    if (student.hobbies.includes('coding')) {
+      acc.codingStudentNum += 1;
+      acc.codingStudentGPA += student.GPA;
+    }
+    return acc;
+  }, { studentNum: 0, studentAvgGPA: 0, codingStudentNum: 0, codingStudentGPA: 0 });
+
+  result.studentAvgGPA = result.studentNum > 0 ? Number((result.studentAvgGPA / result.studentNum).toFixed(2)) : 0;
+  result.codingStudentGPA = result.codingStudentNum > 0 ? Number((result.codingStudentGPA / result.codingStudentNum).toFixed(2)) : 0;
+
+  return result;
+
 }
 
 /**
@@ -127,6 +156,16 @@ function aggregateStudentData(students) {
  */
 function swapForm(input) {
   // Your implementation here
+  if (input.includes(' ')) {
+    // Convert sentence to camelCase
+    return input.split(' ').map((word, index) => {
+      if (index === 0) return word; // Keep the first word in lowercase
+      return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of subsequent words
+    }).join('');
+  } else {
+    // Convert camelCase to sentence
+    return input.replace(/([A-Z])/g, ' $1').toLowerCase().trim();
+  }
 }
 
 // Export the function for testing with Jest
